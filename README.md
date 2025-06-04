@@ -138,7 +138,7 @@ Metrik evaluasi yang digunakan untuk menilai performa model pada data uji adalah
 **Visualisasi Model Terbaik:**  
 Sebuah scatter plot yang membandingkan nilai prediksi model terbaik dengan nilai aktual `Tuition_USD` pada data uji (dalam skala aslinya) membantu memvisualisasikan sebaran error dan seberapa baik model mengikuti garis ideal y=x.
 
-## Kesimpulan (Contoh)  
+## Kesimpulan
 Proyek ini berhasil mengembangkan dan mengevaluasi beberapa model machine learning untuk memprediksi biaya kuliah internasional. Model *[Random Forest Regressor]* menunjukkan performa paling menjanjikan dengan MAE sebesar *[2,436.45]* dan R2 Score sebesar *[N0.9482]*. Analisis menunjukkan bahwa hubungan dalam data bersifat non-linear, yang menjelaskan mengapa model yang lebih fleksibel seperti Random Forest atau Gradient Boosting mengungguli Linear Regression. Langkah selanjutnya dapat mencakup *hyperparameter tuning* lebih lanjut untuk model terbaik, eksplorasi *feature engineering* yang lebih canggih (terutama untuk menangani fitur kardinalitas tinggi yang di-drop), atau penggunaan model ensemble yang lebih advance.
 
 ## Langkah selanjutnya yang dapat dipertimbangkan meliputi:
