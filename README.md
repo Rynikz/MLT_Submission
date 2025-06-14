@@ -1,4 +1,4 @@
-# Laporan Proyek Machine Learning - Wahyu Adji Agus Saputra
+# Laporan Proyek Machine Learning - Sistem Rekomendasi Film
 
 ## Project Overview
 
@@ -32,9 +32,9 @@ Untuk mencapai tujuan tersebut, dua pendekatan solusi akan dikembangkan dan diev
 2.  **Collaborative Filtering**: Mengajukan solusi rekomendasi dengan membuat model yang merekomendasikan film berdasarkan pola rating dari pengguna lain yang memiliki selera serupa. Model ini mampu menemukan rekomendasi yang lebih beragam dan tidak terduga.
 
 ## Data Understanding
-Dataset yang digunakan dalam proyek ini adalah **MovieLens 32M Dataset**. Dataset ini berisi 32,000,204 ratings pada 87,585 film oleh 200,948 pengguna. Data ini dibuat antara Januari 1995 dan Oktober 2023.
+Dataset yang digunakan dalam proyek ini adalah **MovieLens 32M Dataset**. Dataset ini berisi 32,000,204 rating pada 87,585 film oleh 200,948 pengguna. Data ini dibuat antara Januari 1995 dan Oktober 2023.
 
--   **Sumber Data**: Dataset dapat diunduh dari [MovieLens Latest Datasets](https://grouplens.org/datasets/movielens/32m/).
+-   **Sumber Data**: Dataset dapat diunduh dari [MovieLens Latest Datasets](httpss://grouplens.org/datasets/movielens/32m/).
 
 Dataset ini terdiri dari beberapa file, namun proyek ini fokus pada dua file utama: `movies.csv` dan `ratings.csv`.
 -   **movies.csv**: Berisi informasi detail mengenai setiap film.
@@ -73,7 +73,7 @@ Tahap persiapan data adalah langkah paling krusial dalam proyek ini karena ukura
         filtered_chunk = chunk[(chunk['userId'].isin(active_users)) & (chunk['movieId'].isin(popular_movies))]
         filtered_chunks.append(filtered_chunk)
     ```
-4.  **Penggabungan dan Pembersihan Akhir**: Bagian-bagian kecil yang sudah terfilter digabungkan menjadi satu DataFrame final. Hasilnya adalah DataFrame dengan **157,458** baris. Pada data yang sudah jauh lebih kecil inilah dilakukan pengecekan nilai `null` dan data duplikat.
+4.  **Penggabungan dan Pembersihan Akhir**: Bagian-bagian kecil yang sudah terfilter digabungkan menjadi satu DataFrame final. Hasilnya adalah DataFrame dengan **7.371.386** baris. Pada data yang sudah jauh lebih kecil inilah dilakukan pengecekan nilai `null` dan data duplikat.
 5.  **Feature Engineering**: Pada data final yang bersih, dibuat fitur baru `year` dan `title_cleaned`.
 
 ## Modeling
@@ -85,46 +85,45 @@ Model ini bekerja dengan merekomendasikan film yang memiliki kemiripan konten be
 -   **Proses**: `TfidfVectorizer` digunakan untuk mengubah data teks genre menjadi vektor numerik. Selanjutnya, *Cosine Similarity* dihitung untuk menentukan skor kemiripan antara semua film.
 -   **Hasil Rekomendasi (Input: 'Toy Story' dengan movieId=1):**
 
-| movieId | title_cleaned        | genres                                      |
-|:--------|:---------------------|:--------------------------------------------|
-| 2355    | A Bug's Life      | Adventure\|Animation\|Children\|Comedy      |
-| 3114    | Toy Story 2        | Adventure\|Animation\|Children\|Comedy\|Fantasy |
-| 4886    | Monsters, Inc.     | Adventure\|Animation\|Children\|Comedy\|Fantasy |
-| 58559   | WALL·E             | Adventure\|Animation\|Children\|Romance\|Sci-Fi |
-| 6377    | Finding Nemo       | Adventure\|Animation\|Children\|Comedy      |
-| 78499   | Toy Story 3        | Adventure\|Animation\|Children\|Comedy\|Fantasy |
-| 89745   | Monsters University| Adventure\|Animation\|Comedy\|Fantasy     |
-| 59501   | Kung Fu Panda     | Action\|Animation\|Children\|Comedy\|IMAX   |
-| 62113   | The Incredibles    | Action\|Adventure\|Animation\|Children\|Comedy  |
-
+| movieId | title_cleaned | genres |
+|:---|:---|:---|
+| 2294 | 'Antz' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 3114 | 'Toy Story 2' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 3754 | 'Adventures of Rocky and Bullwinkle, The' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 4016 | 'Emperor's New Groove, The' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 4886 | 'Monsters, Inc.' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 53121 | 'Shrek the Third' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 213207 | 'Onward' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 166461 | 'Moana' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 225173 | 'Soul' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
+| 281096 | 'Puss in Boots: The Last Wish' | 'Adventure\|Animation\|Children\|Comedy\|Fantasy' |
 
 ### Model 2: Collaborative Filtering
-Model ini merekomendasikan film berdasarkan kemiripan selera antar pengguna menggunakan algoritma **SVD (Singular Value Decomposition)** dari library `Surprise`.
+Model ini merekomendasikan film berdasarkan kemiripan selera antar pengguna menggunakan algoritma **SVD (Singular Value Decomposition)**.
 
--   **Proses**: Model SVD dilatih pada data interaksi `userId`, `movieId`, dan `rating` untuk mempelajari vektor laten (preferensi tersembunyi) dari pengguna dan film.
+-   **Proses**: Model SVD dilatih pada data interaksi (`userId`, `movieId`, `rating`) untuk mempelajari vektor laten (preferensi tersembunyi) dari pengguna dan film.
 -   **Hasil Rekomendasi (Input: userId=50):**
 
-  
-| movieId | title_cleaned                | genres                               |
-|:--------|:-----------------------------|:-------------------------------------|
-| 318     | Shawshank Redemption, The  | Crime\|Drama                        |
-| 858     | Godfather, The             | Crime\|Drama                        |
-| 2959    | Fight Club                 | Action\|Crime\|Drama\|Thriller      |
-| 1221    | Godfather: Part II, The    | Crime\|Drama                         |
-| 4993    | Lord of the Rings: The Fellowship of the Ring, The | 'Adventure\|Fantasy |
-| 5952    | Lord of the Rings: The Two Towers, The | 'Adventure\|Fantasy |
-| 7153    | Lord of the Rings: The Return of the King, The | 'Action\|Adventure\|Drama\|Fantasy |
-| 2028    | Saving Private Ryan        | Action\|Drama\|War                  |
-| 2571    | Matrix, The                | Action\|Sci-Fi\|Thriller            |
-| 58559   | WALL·E                     | Adventure\|Animation\|Children\|Romance\|Sci-Fi |
+| movieId | title_cleaned | genres |
+|:---|:---|:---|
+| 159817 | 'Planet Earth' | 'Documentary' |
+| 318 | 'Shawshank Redemption, The' | 'Crime\|Drama' |
+| 171011 | 'Planet Earth II' | 'Documentary' |
+| 179135 | 'Blue Planet II' | 'Documentary' |
+| 170705 | 'Band of Brothers' | 'Action\|Drama\|War' |
+| 858 | 'Godfather, The' | 'Crime\|Drama' |
+| 296 | 'Pulp Fiction' | 'Comedy\|Crime\|Drama\|Thriller' |
+| 1203 | '12 Angry Men' | 'Drama' |
+| 2571 | 'Matrix, The' | 'Action\|Sci-Fi\|Thriller' |
+| 4226 | 'Memento' | 'Mystery\|Thriller' |
 
 ### Kelebihan dan Kekurangan Pendekatan
 -   **Content-Based Filtering**:
-    -   *Kelebihan*: Tidak memerlukan data pengguna lain (mengatasi masalah *user cold-start*) dan dapat merekomendasikan item yang tidak populer.
-    -   *Kekurangan*: Terbatas pada fitur yang ada (kurang bisa memberikan rekomendasi yang mengejutkan) dan bisa menjadi terlalu spesifik (*over-specialization*).
+    -   *Kelebihan*: Tidak memerlukan data pengguna lain (mengatasi masalah *user cold-start*). Mampu merekomendasikan item yang tidak populer.
+    -   *Kekurangan*: Cenderung merekomendasikan item yang sangat mirip (*over-specialization*) sehingga kurang ada unsur kejutan (*serendipity*).
 -   **Collaborative Filtering**:
-    -   *Kelebihan*: Mampu menemukan rekomendasi yang beragam dan mengejutkan (*serendipity*) tanpa memerlukan fitur item.
-    -   *Kekurangan*: Mengalami masalah *item cold-start* (tidak bisa merekomendasikan item baru tanpa rating) dan membutuhkan data interaksi yang banyak.
+    -   *Kelebihan*: Mampu menemukan rekomendasi yang beragam dan mengejutkan. Seringkali dianggap lebih akurat dalam menangkap selera pengguna.
+    -   *Kekurangan*: Mengalami masalah *item cold-start* (tidak bisa merekomendasikan item baru yang belum memiliki rating).
 
 ## Evaluation
 Performa model diukur secara kuantitatif menggunakan metrik yang sesuai untuk setiap pendekatan.
@@ -134,15 +133,22 @@ Performa model diukur secara kuantitatif menggunakan metrik yang sesuai untuk se
 -   **Formula**:
     $$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
     Di mana $n$ adalah jumlah rating, $y_i$ adalah rating aktual, dan $\hat{y}_i$ adalah rating hasil prediksi.
--   **Hasil**: Model dievaluasi menggunakan 5-fold cross-validation. Hasil rata-rata RMSE yang didapatkan adalah **0.8192**. Nilai ini menunjukkan bahwa secara rata-rata, prediksi rating dari model memiliki selisih sekitar 0.82 poin dari rating sebenarnya, sebuah hasil yang sangat baik dan akurat.
+-   **Hasil**: Model dievaluasi menggunakan 5-fold cross-validation. Berikut adalah rincian hasil dari proses tersebut:
+    ```
+       Evaluating RMSE, MAE of algorithm SVD on 5 split(s).
+
+                  Fold 1  Fold 2  Fold 3  Fold 4  Fold 5  Mean    Std     
+    RMSE (testset)    0.7091  0.7101  0.7108  0.7098  0.7098  0.7099  0.0005  
+    MAE (testset)     0.5344  0.5351  0.5356  0.5349  0.5350  0.5350  0.0004  
+    Fit time          106.75  108.82  108.53  110.96  110.07  109.03  1.43    
+    Test time         32.60   25.45   24.97   27.30   27.69   27.60   2.71    
+
+    Rata-rata RMSE dari data terfilter: 0.7099
+    ```
+    Hasil rata-rata RMSE yang didapatkan adalah **0.7099**. Nilai ini menunjukkan bahwa secara rata-rata, prediksi rating dari model memiliki selisih sekitar 0.71 poin dari rating sebenarnya, sebuah hasil yang sangat akurat.
 
 ### Evaluasi Content-Based Filtering
--   **Metrik**: **Precision@10**. Metrik ini mengukur seberapa relevan 10 rekomendasi teratas yang diberikan. Metrik ini menghitung persentase item yang direkomendasikan yang ternyata benar-benar disukai oleh pengguna.
+-   **Metrik**: **Precision@10**. Metrik ini mengukur seberapa relevan 10 rekomendasi teratas yang diberikan dengan menghitung persentase item yang direkomendasikan yang ternyata benar-benar disukai oleh pengguna.
 -   **Formula**:
     $$Precision@k = \frac{\text{Jumlah Rekomendasi Relevan yang Ditemukan}}{k}$$
--   **Hasil**: Setelah melalui pengujian dengan menyembunyikan sebagian data yang disukai pengguna dan mencoba "menebaknya" kembali, model mencapai **rata-rata Precision@10 sebesar 0.1540**. Ini berarti, dari 10 film yang direkomendasikan, sekitar **15.40%** terbukti relevan. Dalam konteks sistem rekomendasi dengan puluhan ribu pilihan film, skor ini terbilang bagus dan menunjukkan bahwa model memiliki kemampuan prediktif yang jauh lebih baik daripada acak.
-
-
-
-
-
+-   **Hasil**: Setelah melalui pengujian, model mencapai **rata-rata Precision@10 sebesar 0.1540**. Ini berarti, dari 10 film yang direkomendasikan, sekitar **15.40%** terbukti relevan, sebuah hasil yang solid mengingat besarnya jumlah pilihan film yang ada.
