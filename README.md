@@ -1,7 +1,4 @@
-# Laporan Proyek Machine Learning - Sistem Rekomendasi Film
-
-- **Nama:** Wahyu
-- **Email:** [Email Anda]
+# Laporan Proyek Machine Learning - Wahyu Adji Agus Saputra
 
 ## Project Overview
 
